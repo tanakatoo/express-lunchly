@@ -8,13 +8,32 @@ const db = require("../db");
 /** A reservation for a party */
 
 class Reservation {
-  constructor({id, customerId, numGuests, startAt, notes}) {
+  constructor({ id, customerId, numGuests, startAt, notes }) {
     this.id = id;
     this.customerId = customerId;
-    this.numGuests = numGuests;
+    this._numGuests = "";
     this.startAt = startAt;
     this.notes = notes;
   }
+
+  get numGuests() {
+
+    return this._numGuests
+  }
+  set numGuests(num) {
+    if (num < 1) {
+      return 11
+    } else {
+      this._numGuests = num
+    }
+  }
+  // set notes(notes) {
+  //   if (notes == 'none') {
+  //     this.notes = ''
+  //   } else {
+  //     this.notes = notes
+  //   }
+  // }
 
   /** formatter for startAt */
 
@@ -26,17 +45,24 @@ class Reservation {
 
   static async getReservationsForCustomer(customerId) {
     const results = await db.query(
-          `SELECT id, 
+      `SELECT id, 
            customer_id AS "customerId", 
            num_guests AS "numGuests", 
            start_at AS "startAt", 
            notes AS "notes"
          FROM reservations 
          WHERE customer_id = $1`,
-        [customerId]
+      [customerId]
     );
 
     return results.rows.map(row => new Reservation(row));
+  }
+
+  async save() {
+    const results = await db.query(`
+    INSERT INTO reservations (customer_id,num_guests, start_at, notes) VALUES ($1,$2,$3,$4) RETURNING *
+    `, [this.customerId, this._numGuests, this.startAt, this.notes])
+    return results.rows[0]
   }
 }
 
