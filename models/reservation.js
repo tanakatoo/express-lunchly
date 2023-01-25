@@ -11,7 +11,7 @@ class Reservation {
   constructor({ id, customerId, numGuests, startAt, notes }) {
     this.id = id;
     this.customerId = customerId;
-    this._numGuests = "";
+    this.numGuests = numGuests;
     this.startAt = startAt;
     this.notes = notes;
   }
@@ -22,18 +22,19 @@ class Reservation {
   }
   set numGuests(num) {
     if (num < 1) {
-      return 11
+      throw 'not enough guests'
     } else {
       this._numGuests = num
     }
   }
-  // set notes(notes) {
-  //   if (notes == 'none') {
-  //     this.notes = ''
-  //   } else {
-  //     this.notes = notes
-  //   }
-  // }
+
+  get customerId() {
+    return this._customer_id
+  }
+  set customerId(id) {
+    throw 'cannot reassign customer id'
+  }
+
 
   /** formatter for startAt */
 

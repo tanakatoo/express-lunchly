@@ -14,13 +14,28 @@ class Customer {
     this.notes = notes;
   }
 
-  // set notes(notes) {
-  //   if (notes == 'none') {
-  //     this.notes = ''
+  // get firstName() {
+  //   return this._firstName
+  // }
+  // set firstName(newFirstName) {
+  //   if (newFirstName.length < 2) {
+  //     this._firstName = "this is me"
   //   } else {
-  //     this.notes = notes
+  //     this._firstName = newFirstName
   //   }
   // }
+
+  get notes() {
+    return this._notes
+  }
+
+  set notes(notes) {
+    if (notes == 'none') {
+      this._notes = ''
+    } else {
+      this._notes = notes
+    }
+  }
   /** find all customers. */
 
   static async all() {
